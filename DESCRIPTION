@@ -13,8 +13,8 @@ Description: Ranks library compounds (for example 'LINCS' L1000 signatures) agai
     list and a one-page case figure. No pathway or compound data are shipped: 'KEGG'
     pathways are downloaded from the 'KEGG' REST API, other databases with 'msigdbr',
     and compound information comes from 'signatureSearch' or the user's own table.
-URL: https://github.com/OWNER/PArallax
-BugReports: https://github.com/OWNER/PArallax/issues
+URL: https://github.com/centromics/PArallax
+BugReports: https://github.com/centromics/PArallax/issues
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.1.0)

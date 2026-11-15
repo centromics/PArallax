@@ -26,8 +26,8 @@ install.packages("PArallax")
 
 # from GitHub (development version)
 install.packages("remotes")
-remotes::install_github("OWNER/PArallax")
-# while the repository is private: remotes::install_github("OWNER/PArallax", auth_token = "<your GitHub token>")
+remotes::install_github("centromics/PArallax")
+# while the repository is private: remotes::install_github("centromics/PArallax", auth_token = "<your GitHub token>")
 
 # optional packages
 install.packages(c("msigdbr"))                                        # MSigDB databases
