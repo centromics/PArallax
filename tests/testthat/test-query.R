@@ -9,11 +9,11 @@ sim <- function() {
   list(expr = expr, lib = lib, sets = sets)
 }
 
-test_that("panoply_query puts the reversing compound in tier 1", {
+test_that("parallax_query puts the reversing compound in tier 1", {
   d <- sim()
-  res <- panoply_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, signature = "meandiff", split = "none",
+  res <- parallax_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, signature = "meandiff", split = "none",
                        n_gene = 30, k_pw = 5, explore = FALSE)
-  expect_s3_class(res, "panoply_result")
+  expect_s3_class(res, "parallax_result")
   r <- res$all[res$all$drug == "cpd1", ]
   expect_lte(r$G_rank, 0.1); expect_lte(r$P_rank, 0.1); expect_equal(r$tier, "1")
   expect_equal(res$list$drug[1], "cpd1")
@@ -24,7 +24,7 @@ test_that("panoply_query puts the reversing compound in tier 1", {
 test_that("every mapping method runs and the score stays WTCS", {
   d <- sim()
   for (m in c("sgses_max", "avgz", "zscore", "ssgsea", "singscore", "ora_signed")) {
-    res <- panoply_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, mapping = m, signature = "meandiff", split = "none",
+    res <- parallax_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, mapping = m, signature = "meandiff", split = "none",
                          n_gene = 30, k_pw = 5, explore = FALSE)
     expect_equal(res$settings$mapping, m); expect_equal(res$settings$score, "WTCS")
   }
@@ -33,45 +33,45 @@ test_that("every mapping method runs and the score stays WTCS", {
 test_that("split modes, explore and every figure run", {
   d <- sim()
   for (sp in c("explore", "rule")) {
-    res <- panoply_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, signature = "meandiff", n_gene = 30, k_pw = 5,
+    res <- parallax_query(d$expr, rep(0:1, each = 3), d$lib, d$sets, signature = "meandiff", n_gene = 30, k_pw = 5,
                          split = sp, n_draw = 20, explore_min = 5)
     expect_true(all(res$list$tier %in% c("1a", "1b", "3")))
   }
   for (t in c("list", "landscape", "signature", "cases", "pathways")) expect_s3_class(plot_query(res, t), "ggplot")
-  expect_s3_class(plot_query(res, "figure"), "panoply_figure")
+  expect_s3_class(plot_query(res, "figure"), "parallax_figure")
 })
 
 test_that("db picks one collection; several db are scored separately", {
-  toy <- panoply_toy()
+  toy <- parallax_toy()
   k <- get_pathways(toy$pathways, "kegg", rownames(toy$library))
   expect_equal(attr(k, "db"), "KEGG"); expect_true(all(grepl("^KEGG_", names(k))))
   expect_error(get_pathways(toy$pathways, NULL, rownames(toy$library)))
-  m <- panoply_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = c("KEGG", "REACTOME"),
+  m <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = c("KEGG", "REACTOME"),
                      signature = "meandiff", n_gene = 30, k_pw = 6, n_top = 5, n_draw = 50, explore_min = 5)
-  expect_s3_class(m, "panoply_multi"); expect_equal(names(m), c("KEGG", "REACTOME"))
+  expect_s3_class(m, "parallax_multi"); expect_equal(names(m), c("KEGG", "REACTOME"))
   expect_true(all(grepl("^REACTOME_", rownames(m$REACTOME$library_pw))))
 })
 
 test_that("the toy reverser is found and a mismatched library_pw is refused", {
-  toy <- panoply_toy()
-  res <- panoply_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG", annotation = toy$annotation,
+  toy <- parallax_toy()
+  res <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG", annotation = toy$annotation,
                        signature = "meandiff", n_gene = 30, k_pw = 6, n_top = 5, n_draw = 50, explore_min = 5)
   expect_true(res$all$tier[res$all$drug == "TOY001"] %in% c("1a", "1b"))
   lp <- map_pathways(toy$library, get_pathways(toy$pathways, "KEGG", rownames(toy$library)), "avgz")
-  expect_error(panoply_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG", library_pw = lp,
+  expect_error(parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG", library_pw = lp,
                              signature = "meandiff", n_gene = 30, k_pw = 6, n_top = 5, explore = FALSE, split = "none"))
 })
 
 test_that("bad group coding is refused", {
   d <- sim()
-  expect_error(panoply_query(d$expr, rep(0, 6), d$lib, d$sets, signature = "meandiff"))
+  expect_error(parallax_query(d$expr, rep(0, 6), d$lib, d$sets, signature = "meandiff"))
 })
 
 test_that("annotation columns are found by name and BRD IDs are matched", {
   R <- data.frame(drug = c("CPC006_A549_6H:BRD-K12345678-001-01-1:10", "TOY002__x", "cpd3"), stringsAsFactors = FALSE)
   ann <- data.frame(pert_id = c("BRD-K12345678", "TOY002"), pert_iname = c("drugA", "drugB"), moa = c("m1", "m2"),
                     target = c("T1", "T2"), stringsAsFactors = FALSE)
-  out <- PAnoply:::annotate_compounds(R, ann)
+  out <- PArallax:::annotate_compounds(R, ann)
   expect_equal(out$name, c("drugA", "drugB", "cpd3")); expect_equal(out$target, c("T1", "T2", NA))
 })
 

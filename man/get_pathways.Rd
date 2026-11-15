@@ -26,7 +26,7 @@ disease pathways excluded, as in the paper) or \code{"KEGG_ALL"} (with them); or
 }
 \value{Named list of gene sets with attribute \code{db}.}
 \examples{
-toy <- panoply_toy()
+toy <- parallax_toy()
 k <- get_pathways(toy$pathways, "KEGG", rownames(toy$library))
 length(k); attr(k, "db")
 }

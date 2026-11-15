@@ -1,4 +1,4 @@
-#' PAnoply: connectivity scoring in pathway space on both sides
+#' PArallax: connectivity scoring in pathway space on both sides
 #'
 #' Ranks library compounds against a query signature with two scores computed by the
 #' same statistic, the weighted connectivity score (WTCS): G on genes and P on pathways,
@@ -8,7 +8,7 @@
 #' (1a/1b or 1: G and P both near the top; 3: G only), with the pathways that connect each
 #' compound to the query.
 #'
-#' Main entry point: \code{\link{panoply_query}}.
+#' Main entry point: \code{\link{parallax_query}}.
 #' @keywords internal
 "_PACKAGE"
 

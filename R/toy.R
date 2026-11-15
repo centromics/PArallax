@@ -10,13 +10,13 @@
 #' @return list: \code{expr} (genes x samples), \code{group} (factor, control first), \code{library} (genes x compounds),
 #'   \code{pathways} (list of two collections), \code{annotation} (\code{id}, \code{name}, \code{moa}), \code{truth}.
 #' @examples
-#' toy <- panoply_toy()
-#' res <- panoply_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
+#' toy <- parallax_toy()
+#' res <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
 #'                      annotation = toy$annotation, signature = "meandiff",
 #'                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
 #' res
 #' @export
-panoply_toy <- function(seed = 1L) {
+parallax_toy <- function(seed = 1L) {
   set.seed(seed)
   genes <- sprintf("G%03d", 1:600)
   mk <- function(prefix, n) stats::setNames(lapply(seq_len(n), function(i) sample(genes, sample(15:40, 1))), sprintf("%s_PATHWAY_%02d", prefix, seq_len(n)))

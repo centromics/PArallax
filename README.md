@@ -1,4 +1,6 @@
-# PAnoply 1.1.0
+# PArallax 1.1.0
+
+**PArallax: connectivity mapping with depth from gene and pathway perspectives.**
 
 Connectivity scoring in pathway space on both sides. The same statistic (WTCS) scores every library compound twice:
 on genes (G) and on pathways (P), after the query and the library are both mapped to pathway scores.
@@ -20,12 +22,12 @@ pathways, as in the paper's same-compound benchmark; `"none"`.
 
 ```r
 # from CRAN (once accepted)
-install.packages("PAnoply")
+install.packages("PArallax")
 
 # from GitHub (development version)
 install.packages("remotes")
-remotes::install_github("OWNER/PAnoply")
-# while the repository is private: remotes::install_github("OWNER/PAnoply", auth_token = "<your GitHub token>")
+remotes::install_github("OWNER/PArallax")
+# while the repository is private: remotes::install_github("OWNER/PArallax", auth_token = "<your GitHub token>")
 
 # optional packages
 install.packages(c("msigdbr"))                                        # MSigDB databases
@@ -35,18 +37,18 @@ BiocManager::install(c("GSVA", "AnnotationDbi", "org.Hs.eg.db", "signatureSearch
 ## Use
 
 ```r
-library(PAnoply)
+library(PArallax)
 # expr: genes x samples (control and case); lincs: genes x compounds; same gene IDs (Entrez)
 grp <- factor(c("ctrl", "ctrl", "ctrl", "case", "case", "case"), levels = c("ctrl", "case"))
 ann <- signatureSearch::lincs_pert_info2             # compound name, MOA, target (or your own table)
-res <- panoply_query(expr, grp, lincs, annotation = ann)   # default: latest KEGG, sgses_max, reverse, rank product
+res <- parallax_query(expr, grp, lincs, annotation = ann)   # default: latest KEGG, sgses_max, reverse, rank product
 res                                                  # tiers and the ranked list
 plot_query(res, "list")                              # the ranked list (format of Figures 3c/3d)
 plot_query(res, "figure", query_label = "senescence")   # panels a-e on one page (format of Figure 7)
-panoply_figures(res, "my_query", query_label = "senescence")   # both, as PDF + PNG at 183 mm
+parallax_figures(res, "my_query", query_label = "senescence")   # both, as PDF + PNG at 183 mm
 ```
 
-Main arguments of `panoply_query()`:
+Main arguments of `parallax_query()`:
 
 * **`db`, pathway database** (one at a time; several names are scored one by one, never merged, and returned as a list)
   * default: the latest KEGG, human, disease pathways (hsa05...) excluded, downloaded from the KEGG REST API once per session,
@@ -59,7 +61,7 @@ Main arguments of `panoply_query()`:
   columns are found by name, and library columns are matched by full ID, the part before `"__"`, or the BRD compound ID.
 * **Large library**: download and map once, then reuse:
   `kegg <- get_pathways(univ = rownames(lincs)); lp <- map_pathways(lincs, kegg, "sgses_max")`,
-  then `panoply_query(..., pathways = kegg, library_pw = lp)`.
+  then `parallax_query(..., pathways = kegg, library_pw = lp)`.
 
 ## Data
 
@@ -71,18 +73,18 @@ No pathway or compound data are shipped with the package.
 | Reactome, WikiPathways, PID | MSigDB via msigdbr, at run time | MSigDB: CC BY 4.0 |
 | KEGG_MEDICUS / KEGG_LEGACY / BioCarta | MSigDB via msigdbr, at run time | additional restrictions; see the MSigDB license terms |
 | compound information | `signatureSearch::lincs_pert_info2` or your own table | LINCS / CMap terms |
-| toy data | `panoply_toy()` generates it | — |
+| toy data | `parallax_toy()` generates it | — |
 
 ## Toy example
 
 ```r
-toy <- panoply_toy()                                 # 600 genes, 8 samples, 150 compounds, two invented collections
-res <- panoply_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
+toy <- parallax_toy()                                 # 600 genes, 8 samples, 150 compounds, two invented collections
+res <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
                      annotation = toy$annotation, signature = "meandiff",
                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
 res
 plot_query(res, "figure", query_label = "toy case")
-source(system.file("examples", "toy_example.R", package = "PAnoply"))   # the full walk-through
+source(system.file("examples", "toy_example.R", package = "PArallax"))   # the full walk-through
 ```
 
 ## Notes

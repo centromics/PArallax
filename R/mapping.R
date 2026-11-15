@@ -46,7 +46,7 @@ TF <- list(sgses_max = tf_sgses_max, avgz = tf_avgz, zscore = tf_zscore, ssgsea 
 #' Map profiles to pathway scores
 #'
 #' Single-sample, signed pathway scores (positive = up). \code{sgses_max} is the signed
-#' maximum deviation of the weighted Kolmogorov-Smirnov running sum (the PAnoply default).
+#' maximum deviation of the weighted Kolmogorov-Smirnov running sum (the PArallax default).
 #' @param M numeric matrix, genes x profiles.
 #' @param sets named list of gene sets with the identifiers of \code{rownames(M)}.
 #' @param method mapping method.

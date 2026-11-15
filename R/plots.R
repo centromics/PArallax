@@ -193,18 +193,18 @@
             ttl(.p_cases(x, n_case, ql), "d"), ttl(.p_pathways(x, n_case, ql), "e"))
   P <- lapply(P, function(p) if (inherits(p, "ggplot")) ggplot2::ggplotGrob(p) else p)
   g <- gridExtra::arrangeGrob(grobs = P, layout_matrix = rbind(c(1, 2), c(3, 5), c(4, 4)), heights = c(1, 1.05, 1.15), widths = c(1, 1.05))
-  class(g) <- c("panoply_figure", class(g)); g
+  class(g) <- c("parallax_figure", class(g)); g
 }
 
-#' Figures of a panoply_result
+#' Figures of a parallax_result
 #'
 #' \code{plot_query} draws one figure: \code{"figure"} (all case panels on one page: a query signature in pathway space,
 #' b every compound by G rank and P rank, c coherence of tier 1, d gene-level change of the 1a compounds inside their
 #' connecting pathways, e connecting pathways of the 1a compounds; the format of Figure 7 of the paper),
 #' \code{"list"} (the ranked list a researcher receives; the format of Figures 3c and 3d), or one panel
 #' (\code{"signature"}, \code{"landscape"}, \code{"coherence"}, \code{"cases"}, \code{"pathways"}).
-#' \code{panoply_figures} writes the list and the figure as PDF and PNG (600 dpi) at the printed width of 183 mm.
-#' @param x a \code{panoply_result} (\code{panoply_figures} also takes a \code{panoply_multi}: one pair of files per database).
+#' \code{parallax_figures} writes the list and the figure as PDF and PNG (600 dpi) at the printed width of 183 mm.
+#' @param x a \code{parallax_result} (\code{parallax_figures} also takes a \code{parallax_multi}: one pair of files per database).
 #' @param type figure type.
 #' @param n rows of the list (default 25) or pathways per direction of the signature (default \code{n_top}).
 #' @param highlight compound IDs or names to highlight in the list.
@@ -212,14 +212,14 @@
 #' @param n_case compounds in the case panels (d, e).
 #' @param prefix file name prefix (may include a folder).
 #' @param n_list rows of the list.
-#' @return \code{plot_query}: a ggplot (a grob of class \code{panoply_figure} for \code{"figure"}; print it to draw);
-#'   \code{panoply_figures}: the file names, invisibly.
+#' @return \code{plot_query}: a ggplot (a grob of class \code{parallax_figure} for \code{"figure"}; print it to draw);
+#'   \code{parallax_figures}: the file names, invisibly.
 #' @export
 plot_query <- function(x, type = c("figure", "list", "landscape", "signature", "coherence", "cases", "pathways"),
                        n = NULL, highlight = NULL, query_label = "query", n_case = 6L) {
   type <- match.arg(type)
-  if (inherits(x, "panoply_multi")) stop("x holds several databases: plot one of them, e.g. plot_query(x[[\"", names(x)[1], "\"]])")
-  stopifnot(inherits(x, "panoply_result"))
+  if (inherits(x, "parallax_multi")) stop("x holds several databases: plot one of them, e.g. plot_query(x[[\"", names(x)[1], "\"]])")
+  stopifnot(inherits(x, "parallax_result"))
   if (is.null(n)) n <- if (type == "list") 25L else x$settings$n_top
   need1 <- function(p, what) if (is.null(p)) stop("no ", what, " to draw") else p
   switch(type,
@@ -234,11 +234,11 @@ plot_query <- function(x, type = c("figure", "list", "landscape", "signature", "
 
 #' @rdname plot_query
 #' @export
-panoply_figures <- function(x, prefix = "panoply", query_label = "query", highlight = NULL, n_list = 25L, n_case = 6L) {
-  if (inherits(x, "panoply_multi"))
-    return(invisible(unlist(lapply(names(x), function(d) panoply_figures(x[[d]], paste0(prefix, "_", gsub("[^A-Za-z0-9]", "", d)),
+parallax_figures <- function(x, prefix = "parallax", query_label = "query", highlight = NULL, n_list = 25L, n_case = 6L) {
+  if (inherits(x, "parallax_multi"))
+    return(invisible(unlist(lapply(names(x), function(d) parallax_figures(x[[d]], paste0(prefix, "_", gsub("[^A-Za-z0-9]", "", d)),
                                                                          query_label, highlight, n_list, n_case)))))
-  stopifnot(inherits(x, "panoply_result"))
+  stopifnot(inherits(x, "parallax_result"))
   mm <- function(v) v / 25.4
   pdf_dev <- function(f, w, h) if (capabilities("cairo")) grDevices::cairo_pdf(f, width = w, height = h) else grDevices::pdf(f, width = w, height = h)
   out <- character(0)
@@ -256,4 +256,4 @@ panoply_figures <- function(x, prefix = "panoply", query_label = "query", highli
 }
 
 #' @export
-print.panoply_figure <- function(x, ...) { grid::grid.newpage(); grid::grid.draw(x); invisible(x) }
+print.parallax_figure <- function(x, ...) { grid::grid.newpage(); grid::grid.draw(x); invisible(x) }

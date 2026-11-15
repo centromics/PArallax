@@ -1,6 +1,6 @@
-Package: PAnoply
+Package: PArallax
 Type: Package
-Title: Connectivity Scoring in Pathway Space on Both Sides
+Title: Connectivity Mapping with Depth from Gene and Pathway Perspectives
 Version: 1.1.0
 Authors@R: person(given = "Sung Young", family = "Kim", role = c("aut", "cre"), email = "palelamp@kku.ac.kr",
                   comment = c(affiliation = "School of Medicine, Konkuk University, South Korea"))
@@ -13,8 +13,8 @@ Description: Ranks library compounds (for example 'LINCS' L1000 signatures) agai
     list and a one-page case figure. No pathway or compound data are shipped: 'KEGG'
     pathways are downloaded from the 'KEGG' REST API, other databases with 'msigdbr',
     and compound information comes from 'signatureSearch' or the user's own table.
-URL: https://github.com/OWNER/PAnoply
-BugReports: https://github.com/OWNER/PAnoply/issues
+URL: https://github.com/OWNER/PArallax
+BugReports: https://github.com/OWNER/PArallax/issues
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.1.0)

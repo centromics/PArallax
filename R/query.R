@@ -14,7 +14,7 @@
 #'   disease pathways (hsa05...), downloaded from the KEGG REST API, as in the paper. Otherwise a collection name in \code{pathways},
 #'   \code{"KEGG"}, \code{"KEGG_ALL"} (with disease pathways), or an MSigDB C2 canonical-pathway subcollection fetched with msigdbr
 #'   (\code{"KEGG_MEDICUS"}, \code{"KEGG_LEGACY"}, \code{"REACTOME"}, \code{"BIOCARTA"}, \code{"PID"}, \code{"WIKIPATHWAYS"}).
-#'   Several names: each database is scored on its own (never merged) and a \code{panoply_multi} list is returned.
+#'   Several names: each database is scored on its own (never merged) and a \code{parallax_multi} list is returned.
 #' @param mapping pathway mapping of the query samples and the library: \code{"sgses_max"} (default; signed maximum deviation of the
 #'   weighted Kolmogorov-Smirnov running sum), \code{"avgz"}, \code{"zscore"}, \code{"ssgsea"}, \code{"gsva"} (needs GSVA),
 #'   \code{"singscore"}, \code{"ora_signed"}. The score is WTCS whatever the mapping.
@@ -40,14 +40,14 @@
 #' @param nperm,seed rank-product permutations and seed.
 #' @param explore compute the exploratory correlation for tier 1 (always on with \code{split = "explore"}).
 #' @param n_draw,explore_min random draws and minimum genes of the exploratory correlation.
-#' @param x a \code{panoply_result} or \code{panoply_multi}.
+#' @param x a \code{parallax_result} or \code{parallax_multi}.
 #' @param n rows to print.
 #' @param ... unused.
-#' @return a \code{panoply_result}: \code{list} (tiers 1a, 1b, 1, then 3; G order inside each tier), \code{all}, \code{signature},
+#' @return a \code{parallax_result}: \code{list} (tiers 1a, 1b, 1, then 3; G order inside each tier), \code{all}, \code{signature},
 #'   \code{library_pw}, \code{sets}, \code{change}, \code{change_lib}, \code{conn}, \code{freq}, \code{settings};
-#'   for several \code{db}, a \code{panoply_multi} list of them, named by database.
+#'   for several \code{db}, a \code{parallax_multi} list of them, named by database.
 #' @export
-panoply_query <- function(expr, group, library, pathways = NULL, db = NULL,
+parallax_query <- function(expr, group, library, pathways = NULL, db = NULL,
                           mapping = c("sgses_max", "avgz", "zscore", "ssgsea", "gsva", "singscore", "ora_signed"),
                           annotation = NULL, library_pw = NULL,
                           direction = c("reverse", "similar"), signature = c("rankprod", "meandiff"),
@@ -65,7 +65,7 @@ panoply_query <- function(expr, group, library, pathways = NULL, db = NULL,
       cl$library_pw <- if (is.list(library_pw) && !is.data.frame(library_pw) && !is.matrix(library_pw)) library_pw[[d]] else NULL
       out[[d]] <- eval(cl, parent.frame())
     }
-    return(structure(out, class = "panoply_multi"))
+    return(structure(out, class = "parallax_multi"))
   }
   mapping <- match.arg(mapping); direction <- match.arg(direction); signature <- match.arg(signature)
   if (is.logical(split)) split <- if (isTRUE(split)) "rule" else "none"
@@ -130,7 +130,7 @@ panoply_query <- function(expr, group, library, pathways = NULL, db = NULL,
                  settings = c(prm, list(direction = direction, signature = signature, split = split, coh_p = coh_p, k_pw = k_pw,
                                         nperm = nperm, seed = seed, explore = explore, n_draw = n_draw, explore_min = explore_min,
                                         score = "WTCS", mapping = mapping, db = db_lab, n_pathways = length(pw)))),
-            class = "panoply_result")
+            class = "parallax_result")
 }
 
 ## compound names, MOA and targets from an annotation table (own table, LINCS pert_info, or signatureSearch::lincs_pert_info2)
@@ -157,11 +157,11 @@ annotate_compounds <- function(R, annotation) {
   R
 }
 
-#' @rdname panoply_query
+#' @rdname parallax_query
 #' @export
-print.panoply_result <- function(x, n = 20, ...) {
+print.parallax_result <- function(x, n = 20, ...) {
   s <- x$settings; tb <- table(factor(x$all$tier, levels = c("1a", "1b", "1", "3", "2", "2x", "-"))); tb <- tb[tb > 0]
-  cat("PAnoply result:", nrow(x$all), "library compounds |", s$direction, "| signature:", s$signature, "| score WTCS\n")
+  cat("PArallax result:", nrow(x$all), "library compounds |", s$direction, "| signature:", s$signature, "| score WTCS\n")
   cat("pathways:", s$db, "(", s$n_pathways, "sets ) | mapping:", s$mapping, "| tier-1 split:", s$split, "\n")
   cat("query:", length(x$signature$genes$up), "+", length(x$signature$genes$dn), "genes,", length(x$signature$pathways$up), "+",
       length(x$signature$pathways$dn), "pathways | direction agreement", round(x$signature$agreement, 2), "\n")
@@ -170,10 +170,10 @@ print.panoply_result <- function(x, n = 20, ...) {
   invisible(x)
 }
 
-#' @rdname panoply_query
+#' @rdname parallax_query
 #' @export
-print.panoply_multi <- function(x, n = 10, ...) {
-  cat("PAnoply results for", length(x), "pathway databases, each scored on its own (never merged):", paste(names(x), collapse = ", "), "\n")
+print.parallax_multi <- function(x, n = 10, ...) {
+  cat("PArallax results for", length(x), "pathway databases, each scored on its own (never merged):", paste(names(x), collapse = ", "), "\n")
   for (d in names(x)) { cat("\n=====", d, "=====\n"); print(x[[d]], n = n) }
   invisible(x)
 }

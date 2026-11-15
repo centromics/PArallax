@@ -2,7 +2,7 @@ test_that("fast WTCS reproduces the reference WTCS", {
   set.seed(1)
   L <- matrix(rnorm(2000), 200, 10, dimnames = list(paste0("g", 1:200), paste0("c", 1:10)))
   up <- paste0("g", 1:20); dn <- paste0("g", 21:40)
-  expect_equal(unname(wtcs_query(prep_lib(L), up, dn)), unname(PAnoply:::ref_wtcs(L, up, dn)), tolerance = 1e-10)
+  expect_equal(unname(wtcs_query(prep_lib(L), up, dn)), unname(PArallax:::ref_wtcs(L, up, dn)), tolerance = 1e-10)
 })
 
 test_that("sgses_max is the signed maximum deviation of the weighted KS running sum", {
