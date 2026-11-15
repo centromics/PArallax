@@ -38,6 +38,7 @@ toy <- parallax_toy()
 res <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
                      annotation = toy$annotation, signature = "meandiff",
                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
-plot_query(res, "list", highlight = "revertin")
-plot_query(res, "figure", query_label = "toy case")
+p <- plot_query(res, "list", highlight = "revertin")      # ggplot; print(p) in a large enough window
+g <- plot_query(res, "figure", query_label = "toy case")   # one-page figure; best written with parallax_figures()
+## parallax_figures(res, "toy", query_label = "toy case")   # PDF + PNG at 183 mm
 }
