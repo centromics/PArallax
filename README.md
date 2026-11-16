@@ -1,20 +1,12 @@
 <p align="center"><img src="inst/examples/parallax.png" style="width:130px;"></p> 
 
 # PArallax 1.1.0
-----
+
 **PArallax: connectivity mapping with depth from gene and pathway perspectives.**
 
 Connectivity scoring in pathway space on both sides. The same statistic (WTCS) scores every library compound twice:
 on genes (G) and on pathways (P), after the query and the library are both mapped to pathway scores.
 G stays the base ranking; P adds evidence. Each compound gets a tier and the pathways that connect it to the query.
-
-| tier | meaning |
-|---|---|
-| 1a | G and P both in the top `cut` (default 10%) of the library, and coherent |
-| 1b | G and P both in the top, not coherent |
-| 1 | G and P both in the top (`split = "none"`) |
-| 3 | G in the top, P not |
-| 2 / 2x | P in the top, G not (with / without an uncommon connecting pathway) |
 
 Coherence (`split`): `"explore"` (default) = the change correlation inside the connecting pathways goes beyond random
 genes (empirical P < 0.05), as in the paper's senescence case; `"rule"` = the genes behind G lie inside the connecting
