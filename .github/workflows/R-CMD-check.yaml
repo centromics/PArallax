@@ -1,4 +1,4 @@
-# R CMD check on every push and pull request (Linux, macOS, Windows)
+# R CMD check (Linux, Windows; macOS left out while the repository is private: macOS minutes count 10x)
 # Runs only when started by hand (Actions tab > R-CMD-check > Run workflow) while the repository is private.
 # When the repository goes public, restore automatic runs:
 #   push:
@@ -18,7 +18,6 @@ jobs:
         config:
           - {os: ubuntu-latest, r: 'release', deps: 'all'}
           - {os: ubuntu-latest, r: 'devel', deps: 'all'}
-          - {os: macos-latest, r: 'release', deps: 'all'}
           - {os: windows-latest, r: 'release', deps: 'all'}
           # as on a CRAN machine without the suggested Bioconductor packages
           - {os: ubuntu-latest, r: 'release', deps: 'hard'}
