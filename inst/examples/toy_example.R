@@ -1,10 +1,23 @@
 ## PArallax toy example: run with  source(system.file("examples", "toy_example.R", package = "PArallax"))
-## Takes a few seconds. Writes into the working folder: toy_KEGG_list / toy_KEGG_figure (.pdf, .png), the same for the
-## two-database run (toy_singscore_*), and toy_REACTOME_landscape.pdf. Open the PDFs to see the figures.
+## Takes a few seconds. Writes into the working folder:
+##   tables  - toy_KEGG_list.csv / toy_KEGG_all.csv (the tier list and every compound), the same for the
+##             two-database run (toy_singscore_KEGG_*.csv, toy_singscore_REACTOME_*.csv)
+##   figures - toy_KEGG_list / toy_KEGG_figure (.pdf, .png), the same for the two-database run (toy_singscore_*),
+##             and toy_REACTOME_landscape.pdf. Open the PDFs to see the figures.
 library(PArallax)
 toy <- parallax_toy()
 str(toy, max.level = 1)
 print(toy$truth)                                    # the seven built-in compounds
+
+## the two tables of a result as CSV: <prefix>_list.csv = tier list (1a, 1b, then 3; G order inside each tier),
+## <prefix>_all.csv = every library compound with its G rank, P rank, tier and connecting pathways
+write_tables <- function(x, prefix) {
+  f <- paste0(prefix, c("_list.csv", "_all.csv"))
+  utils::write.csv(x$list, f[1], row.names = FALSE)
+  utils::write.csv(x$all[order(x$all$G_rank), ], f[2], row.names = FALSE)
+  message("written: ", paste(f, collapse = ", "))
+  invisible(f)
+}
 
 ## 1. one database, default mapping (sgses_max), tier 1 split by the exploratory coherence
 res <- parallax_query(toy$expr, toy$group, toy$library,
@@ -15,6 +28,7 @@ res <- parallax_query(toy$expr, toy$group, toy$library,
                      split = "explore",
                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
 print(res)                                          # tiers and the ranked list
+write_tables(res, "toy_KEGG")                       # res$list and res$all as CSV
 ## the list (format of Figures 3c / 3d) and the one-page figure (format of Figure 7), written at their printed size
 ## (183 mm wide); drawing them in a small plot window can fail with "Viewport has zero dimension(s)"
 parallax_figures(res, "toy_KEGG", query_label = "toy case", highlight = "revertin")
@@ -24,6 +38,7 @@ res2 <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways
                       mapping = "singscore", annotation = toy$annotation, signature = "meandiff",
                       n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
 print(res2)
+for (d in names(res2)) write_tables(res2[[d]], paste0("toy_singscore_", d))   # one pair of CSV files per database
 ggplot2::ggsave("toy_REACTOME_landscape.pdf", plot_query(res2[["REACTOME"]], "landscape", query_label = "toy case"),
                 width = 120, height = 110, units = "mm")
 parallax_figures(res2, "toy_singscore", query_label = "toy case")
@@ -35,3 +50,5 @@ parallax_figures(res2, "toy_singscore", query_label = "toy case")
 ## kegg <- get_pathways(univ = rownames(lincs))                       # latest KEGG once, then map a large library once
 ## lp   <- map_pathways(lincs, kegg, "sgses_max")
 ## res5 <- parallax_query(expr, group, lincs, pathways = kegg, library_pw = lp, annotation = ann)
+## write.csv(res5$list, "my_query_list.csv", row.names = FALSE)       # the tier list
+## write.csv(res5$all,  "my_query_all.csv",  row.names = FALSE)       # every compound
