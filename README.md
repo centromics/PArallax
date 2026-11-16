@@ -1,4 +1,4 @@
-<p align="center"><img src="inst/examples/parallax.png" style="width:150px;"></p> 
+<p align="center"><img src="inst/examples/parallax.png" style="width:130px;"></p> 
 
 # PArallax 1.1.0
 ----
