@@ -1,3 +1,6 @@
+<img width="1037" height="662" alt="image" src="inst/examples/parallax.png" />
+
+
 # PArallax 1.1.0
 
 **PArallax: connectivity mapping with depth from gene and pathway perspectives.**
