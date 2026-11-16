@@ -1,9 +1,8 @@
-<p align="center"><img src=inst/examples/parallax.png" style="width:150px;"></p> 
+<p align="center"><img src="inst/examples/parallax.png" style="width:150px;"></p> 
 
 # PArallax 1.1.0
-
-**PArallax: connectivity mapping with depth from gene and pathway perspectives.**
 ----
+**PArallax: connectivity mapping with depth from gene and pathway perspectives.**
 
 Connectivity scoring in pathway space on both sides. The same statistic (WTCS) scores every library compound twice:
 on genes (G) and on pathways (P), after the query and the library are both mapped to pathway scores.
