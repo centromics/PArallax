@@ -146,7 +146,7 @@ annotate_compounds <- function(R, annotation) {
   ids <- as.character(a[[idc]])
   i <- match(R$drug, ids)
   j <- match(sub("__.*$", "", R$drug), ids); i[is.na(i)] <- j[is.na(i)]
-  j <- match(.brd(R$drug), .brd(ids)); i[is.na(i)] <- j[is.na(i)]
+  j <- match(.brd(R$drug), .brd(ids), incomparables = NA); i[is.na(i)] <- j[is.na(i)]   # no BRD ID: no match
   if (all(is.na(i))) { warning("annotation: no compound ID of the library found in column '", idc, "'"); return(R) }
   pick <- function(cand) { cc <- .acol(a, cand); if (is.na(cc)) return(rep(NA_character_, nrow(R)))
     v <- a[[cc]]; if (is.list(v)) v <- vapply(v, function(e) paste(unique(stats::na.omit(as.character(e))), collapse = ", "), "")

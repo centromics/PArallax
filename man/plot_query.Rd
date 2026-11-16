@@ -12,10 +12,12 @@ connecting pathways, e connecting pathways of the 1a compounds; the format of Fi
 \code{parallax_figures} writes the list and the figure as PDF and PNG (600 dpi) at the printed width of 183 mm.
 }
 \usage{
-plot_query(x, type = c("figure", "list", "landscape", "signature", "coherence", "cases", "pathways"),
+plot_query(x, type = c("figure", "list", "landscape", "signature", "coherence",
+                       "cases", "pathways"),
            n = NULL, highlight = NULL, query_label = "query", n_case = 6L)
 
-parallax_figures(x, prefix = "parallax", query_label = "query", highlight = NULL, n_list = 25L, n_case = 6L)
+parallax_figures(x, prefix = "parallax", query_label = "query", highlight = NULL,
+                 n_list = 25L, n_case = 6L)
 
 \method{print}{parallax_figure}(x, ...)
 }
@@ -38,10 +40,11 @@ toy <- parallax_toy()
 res <- parallax_query(toy$expr, toy$group, toy$library, pathways = toy$pathways, db = "KEGG",
                      annotation = toy$annotation, signature = "meandiff",
                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
-p <- plot_query(res, "list", highlight = "revertin")      # ggplot; print(p) in a large enough window
-g <- plot_query(res, "figure", query_label = "toy case")   # one-page figure; best written with parallax_figures()
+p <- plot_query(res, "list", highlight = "revertin")       # a ggplot
+g <- plot_query(res, "figure", query_label = "toy case")   # one-page figure
 \donttest{
-f <- parallax_figures(res, file.path(tempdir(), "toy"), query_label = "toy case")   # PDF + PNG at 183 mm
+## PDF + PNG at 183 mm
+f <- parallax_figures(res, file.path(tempdir(), "toy"), query_label = "toy case")
 unlink(f)
 }
 }

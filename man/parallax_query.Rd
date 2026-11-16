@@ -12,7 +12,8 @@ coherence; 3 = G only; 2 / 2x = P only.
 }
 \usage{
 parallax_query(expr, group, library, pathways = NULL, db = NULL,
-              mapping = c("sgses_max", "avgz", "zscore", "ssgsea", "gsva", "singscore", "ora_signed"),
+              mapping = c("sgses_max", "avgz", "zscore", "ssgsea", "gsva",
+                          "singscore", "ora_signed"),
               annotation = NULL, library_pw = NULL,
               direction = c("reverse", "similar"), signature = c("rankprod", "meandiff"),
               split = c("explore", "rule", "none"),
