@@ -4,13 +4,19 @@ First submission of PArallax 1.1.0.
 
 ## Test environments
 
-* GitHub Actions: ubuntu-latest (R release and R devel), macos-latest (R release), windows-latest (R release),
-  and ubuntu-latest (R release) without the suggested packages.
-* win-builder (R devel).
+* GitHub Actions: ubuntu-latest (R release and R devel), windows-latest (R release),
+  and ubuntu-latest (R release) without the suggested packages: 0 errors | 0 warnings | 0 notes.
+* win-builder (R devel, 2026-11-14 r90890 ucrt).
 
 ## R CMD check results
 
-<!-- fill in after the checks above have been run -->
+0 errors | 0 warnings | 1 note
+
+* checking CRAN incoming feasibility ... NOTE
+  New submission
+
+  Possibly misspelled words in DESCRIPTION: WTCS (the weighted connectivity score, spelled out where it
+  first appears), Subramanian, et al (author names in the method references).
 
 ## Notes for CRAN
 

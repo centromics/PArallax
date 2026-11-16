@@ -3,7 +3,7 @@ Type: Package
 Title: Connectivity Mapping with Depth from Gene and Pathway Perspectives
 Version: 1.1.0
 Authors@R: person(given = "Sung Young", family = "Kim", role = c("aut", "cre"), email = "palelamp@kku.ac.kr",
-                  comment = c(affiliation = "School of Medicine, Konkuk University, South Korea"))
+                  comment = "School of Medicine, Konkuk University, South Korea")
 Description: Ranks library compounds (for example 'LINCS' L1000 signatures) against a
     query signature with the weighted connectivity score (WTCS) computed twice: on
     genes (G) and on pathways (P), after the query and the library are both mapped
