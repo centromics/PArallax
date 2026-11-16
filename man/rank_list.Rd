@@ -15,3 +15,13 @@ rank_list(gq, pq, LG, LP, sets, prm, direction = "similar", split = TRUE)
 \item{split}{split tier 1 into 1a (coherent) and 1b.}
 }
 \value{A data.frame, one row per compound, with attributes \code{conn} (connecting pathways) and \code{freq} (library frequency of each pathway in the top \code{n_top}).}
+\examples{
+toy <- parallax_toy()
+k <- get_pathways(toy$pathways, "KEGG", rownames(toy$library))
+lp <- map_pathways(toy$library, k)
+qg <- make_signature(toy$expr, toy$group, 30, "meandiff")
+qp <- make_signature(map_pathways(toy$expr, k), toy$group, 6, "meandiff")
+prm <- list(n_gene = 30, cut = 0.1, n_top = 5, spec_max = 0.1, coh_min = 3, coh_ratio = 1.5)
+r <- rank_list(qg[c("up", "dn")], qp[c("up", "dn")], toy$library, lp, k, prm, direction = "reverse")
+head(r[order(r$G_rank), c("drug", "G_rank", "P_rank", "tier")])
+}

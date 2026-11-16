@@ -21,3 +21,8 @@ eval_pair(pl, gm, pw, spaces, prm)
 \item{prm}{list of parameters as in \code{\link{rank_list}}, plus \code{ex_top} and \code{small_max}.}
 }
 \value{\code{make_plan}: a list of pairs. \code{eval_pair}: a data.frame, one row per query and pathway space.}
+\examples{
+IDX <- list(A = stats::setNames(1:5, paste0("c", 1:5)), B = stats::setNames(1:6, paste0("c", 2:7)))
+pr <- rbind(c("A", "B"))
+make_plan(IDX, pr, pr, qmax = 3, extra = 2, seed = 1)
+}

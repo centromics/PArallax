@@ -14,3 +14,7 @@ wtcs_query(lib, up, dn)
 \item{up, dn}{character vectors: the query's up and down features.}
 }
 \value{\code{prep_lib}: a list. \code{wtcs_query}: named numeric vector of WTCS, one per profile.}
+\examples{
+L <- matrix(stats::rnorm(2000), 200, 10, dimnames = list(paste0("g", 1:200), paste0("c", 1:10)))
+wtcs_query(prep_lib(L), up = paste0("g", 1:20), dn = paste0("g", 21:40))
+}

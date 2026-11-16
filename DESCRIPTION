@@ -13,11 +13,13 @@ Description: Ranks library compounds (for example 'LINCS' L1000 signatures) agai
     list and a one-page case figure. No pathway or compound data are shipped: 'KEGG'
     pathways are downloaded from the 'KEGG' REST API, other databases with 'msigdbr',
     and compound information comes from 'signatureSearch' or the user's own table.
+    The connectivity score follows Lamb et al. (2006) <doi:10.1126/science.1132939>
+    and Subramanian et al. (2017) <doi:10.1016/j.cell.2017.10.049>.
 URL: https://github.com/centromics/PArallax
 BugReports: https://github.com/centromics/PArallax/issues
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 4.1.0)
-Imports: stats, utils, grid, grDevices, ggplot2 (>= 3.4.0), ggrepel, scales, gridExtra
+Imports: stats, utils, grid, grDevices, ggplot2 (>= 3.4.0), ggrepel, scales, gridExtra, withr
 Suggests: GSVA, AnnotationDbi, org.Hs.eg.db, GSEABase, msigdbr, signatureSearch, testthat (>= 3.0.0)
 Config/testthat/edition: 3

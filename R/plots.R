@@ -251,7 +251,7 @@ parallax_figures <- function(x, prefix = "parallax", query_label = "query", high
   pl <- .p_list(x, n_list, highlight); nr <- min(n_list, nrow(x$list))
   draw(ggplot2::ggplotGrob(pl), "list", mm(183), mm(30 + 4.6 * nr))
   draw(.p_figure(x, x$settings$n_top, n_case, query_label), "figure", mm(183), mm(240))
-  cat("written:", paste(out, collapse = ", "), "\n")
+  message("written: ", paste(out, collapse = ", "))
   invisible(out)
 }
 

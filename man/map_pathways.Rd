@@ -12,3 +12,9 @@ map_pathways(M, sets, method = c("sgses_max", "avgz", "zscore", "ssgsea", "gsva"
 \item{method}{mapping method; \code{"gsva"} needs GSVA.}
 }
 \value{Numeric matrix, pathways x profiles, with attribute \code{mapping} (checked by \code{\link{parallax_query}} when given as \code{library_pw}).}
+\examples{
+toy <- parallax_toy()
+k <- get_pathways(toy$pathways, "KEGG", rownames(toy$library))
+lp <- map_pathways(toy$library, k, "sgses_max")
+dim(lp); attr(lp, "mapping")
+}

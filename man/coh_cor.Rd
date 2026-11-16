@@ -15,3 +15,8 @@ coh_cor(cg, z, dchg, n_draw, n_min, seed, tail = c("lower", "upper"))
 \item{tail}{\code{"lower"}: P of a correlation this low or lower (reversal); \code{"upper"}: this high or higher (similarity).}
 }
 \value{Named numeric: \code{n}, \code{rho}, \code{bg} (mean of the random correlations), \code{P}.}
+\examples{
+toy <- parallax_toy()
+d <- rowMeans(toy$expr[, toy$group == "case"]) - rowMeans(toy$expr[, toy$group == "control"])
+coh_cor(toy$pathways$KEGG[[1]], toy$library[, "TOY001"], d, n_draw = 100, n_min = 5, seed = 1)
+}

@@ -52,7 +52,7 @@
   .df_sets(as.data.frame(df), id)
 }
 .as_sets <- function(x, id) {
-  if (inherits(x, "GeneSetCollection")) return(GSEABase::geneIds(x))
+  if (inherits(x, "GeneSetCollection")) return(.gsc_ids(x))
   if (is.data.frame(x)) return(.df_sets(x, id))
   x
 }

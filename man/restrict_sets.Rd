@@ -15,3 +15,8 @@ convert_sets(sets, univ, min_size = 5L, max_size = 500L)
 \item{min_size, max_size}{set size limits after restriction.}
 }
 \value{Named list of gene sets.}
+\examples{
+toy <- parallax_toy()
+s <- restrict_sets(toy$pathways$KEGG, rownames(toy$library)[1:300], min_size = 5)
+head(lengths(s))
+}

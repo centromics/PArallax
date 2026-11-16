@@ -17,9 +17,10 @@
 make_plan <- function(IDX, pairs, full_pairs, qmax, extra, seed) lapply(seq_len(nrow(pairs)), function(i) {
   A <- pairs[i, 1]; B <- pairs[i, 2]; ii <- which(full_pairs[, 1] == A & full_pairs[, 2] == B)
   common <- sort(intersect(names(IDX[[A]]), names(IDX[[B]])))
-  set.seed(seed + ii)
-  q <- if (length(common) > qmax) sort(sample(common, qmax)) else common
-  oth <- setdiff(names(IDX[[B]]), q); oth <- oth[sample.int(length(oth), min(extra, length(oth)))]
+  withr::with_seed(seed + ii, {
+    q <- if (length(common) > qmax) sort(sample(common, qmax)) else common
+    oth <- setdiff(names(IDX[[B]]), q); oth <- oth[sample.int(length(oth), min(extra, length(oth)))]
+  })
   list(A = A, B = B, query = q, lib = sort(c(q, oth)))
 })
 TIERS <- c("1a", "1b", "2", "2x", "3", "-")

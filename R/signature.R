@@ -15,9 +15,8 @@ rp_single <- function(x, y, nperm, seed) {
     list(up = exp(rowMeans(log(ru), na.rm = TRUE)), dn = exp(rowMeans(log(rd), na.rm = TRUE)))
   }
   obs <- rp(x)
-  set.seed(seed)
   NU <- ND <- matrix(NA_real_, nrow(x), nperm)
-  for (b in seq_len(nperm)) { r <- rp(apply(x, 2, sample)); NU[, b] <- r$up; ND[, b] <- r$dn }
+  withr::with_seed(seed, for (b in seq_len(nperm)) { r <- rp(apply(x, 2, sample)); NU[, b] <- r$up; ND[, b] <- r$dn })
   pnull <- function(o, N) { v <- sort(as.vector(N[is.finite(N)])); p <- findInterval(o, v) / length(v); p[!is.finite(o)] <- NA; p }
   fc <- rowMeans(x[, i0, drop = FALSE], na.rm = TRUE) - rowMeans(x[, i1, drop = FALSE], na.rm = TRUE)
   data.frame(feature = rownames(x), AveFC = unname(fc),
@@ -69,6 +68,6 @@ coh_cor <- function(cg, z, dchg, n_draw, n_min, seed, tail = c("lower", "upper")
   com <- intersect(names(z), names(dchg)); cg <- intersect(cg, com); n <- length(cg)
   if (n < n_min) return(c(n = n, rho = NA_real_, bg = NA_real_, P = NA_real_))
   rho <- stats::cor(dchg[cg], z[cg], method = "spearman"); dv <- dchg[com]; zv <- z[com]
-  set.seed(seed); rr <- replicate(n_draw, { k <- sample.int(length(com), n); stats::cor(dv[k], zv[k], method = "spearman") })
+  rr <- withr::with_seed(seed, replicate(n_draw, { k <- sample.int(length(com), n); stats::cor(dv[k], zv[k], method = "spearman") }))
   c(n = n, rho = rho, bg = mean(rr), P = (1 + sum(if (tail == "lower") rr <= rho else rr >= rho)) / (n_draw + 1))
 }

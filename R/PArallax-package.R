@@ -14,4 +14,4 @@
 
 utils::globalVariables(c("G_rank", "P_rank", "grp", "name", "v", "lab", "dir", "plab", "score", "spec", "connecting",
                          "d", "z", "pdir", "case", "coh_bg", "coh_rho", "priority", "G_pos", "is_X", "y", "x", "hj", "tl",
-                         "sym", "hit"))
+                         "sym", "hit", "tier"))

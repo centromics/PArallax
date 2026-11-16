@@ -13,3 +13,8 @@ make_signature(x, group, n, method = c("rankprod", "meandiff"), nperm = 100L, se
 \item{nperm, seed}{rank-product permutations and seed.}
 }
 \value{A list: \code{up}, \code{dn}, \code{table}, \code{method}.}
+\examples{
+toy <- parallax_toy()
+s <- make_signature(toy$expr, toy$group, n = 20, method = "rankprod", nperm = 20)
+head(s$up); head(s$dn)
+}

@@ -16,8 +16,7 @@
 #'                      n_gene = 30, k_pw = 6, n_top = 5, n_draw = 200, explore_min = 5)
 #' res
 #' @export
-parallax_toy <- function(seed = 1L) {
-  set.seed(seed)
+parallax_toy <- function(seed = 1L) withr::with_seed(seed, {
   genes <- sprintf("G%03d", 1:600)
   mk <- function(prefix, n) stats::setNames(lapply(seq_len(n), function(i) sample(genes, sample(15:40, 1))), sprintf("%s_PATHWAY_%02d", prefix, seq_len(n)))
   pw <- list(KEGG = mk("KEGG", 40), REACTOME = mk("REACTOME", 60))
@@ -44,4 +43,4 @@ parallax_toy <- function(seed = 1L) {
   ann <- data.frame(id = colnames(lib), name = c(nm, sprintf("compound %03d", 8:150)), moa = moa, stringsAsFactors = FALSE)
   list(expr = expr, group = group, library = lib, pathways = pw, annotation = ann,
        truth = data.frame(id = sprintf("TOY%03d", 1:7), name = nm, role = role, stringsAsFactors = FALSE))
-}
+})

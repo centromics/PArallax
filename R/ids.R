@@ -1,7 +1,16 @@
 id_type <- function(v) { v <- utils::head(stats::na.omit(as.character(v)), 1000); if (mean(grepl("^[0-9]+$", v)) > 0.8) "entrez" else "symbol" }
 .VK <- new.env()
+## gene ID conversion (symbol <-> Entrez) needs two suggested Bioconductor packages
+.need_ann <- function(what = "converting between gene symbols and Entrez IDs") {
+  if (!requireNamespace("AnnotationDbi", quietly = TRUE) || !requireNamespace("org.Hs.eg.db", quietly = TRUE))
+    stop(what, " needs the Bioconductor packages AnnotationDbi and org.Hs.eg.db: ",
+         "BiocManager::install(c(\"AnnotationDbi\", \"org.Hs.eg.db\")), or give gene sets with the identifiers of the data",
+         call. = FALSE)
+  invisible(TRUE)
+}
 conv <- function(v, from, to) {
   v <- unique(stats::na.omit(as.character(v))); if (from == to || !length(v)) return(v)
+  .need_ann()
   kt <- if (from == "entrez") "ENTREZID" else "SYMBOL"; cl <- if (to == "entrez") "ENTREZID" else "SYMBOL"
   if (is.null(.VK[[kt]])) .VK[[kt]] <- AnnotationDbi::keys(org.Hs.eg.db::org.Hs.eg.db, keytype = kt)
   v <- v[v %in% .VK[[kt]]]; if (!length(v)) return(character(0))
@@ -10,12 +19,14 @@ conv <- function(v, from, to) {
 }
 conv_map <- function(v, from, to) {
   if (from == to) return(stats::setNames(as.character(v), v))
+  .need_ann()
   kt <- if (from == "entrez") "ENTREZID" else "SYMBOL"; cl <- if (to == "entrez") "ENTREZID" else "SYMBOL"
   suppressMessages(AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, keys = as.character(v), column = cl, keytype = kt, multiVals = "first"))
 }
 sets_on <- function(sets, univ, min_size = 5L, max_size = 500L) {
   from <- id_type(unlist(utils::head(sets, 20))); to <- id_type(univ)
-  if (from != to) { gall <- unique(stats::na.omit(as.character(unlist(sets)))); mp <- stats::setNames(rep(NA_character_, length(gall)), gall)
+  if (from != to) { .need_ann(paste0("matching ", from, " gene sets to ", to, " data"))
+    gall <- unique(stats::na.omit(as.character(unlist(sets)))); mp <- stats::setNames(rep(NA_character_, length(gall)), gall)
     kt <- if (from == "entrez") "ENTREZID" else "SYMBOL"
     if (is.null(.VK[[kt]])) .VK[[kt]] <- AnnotationDbi::keys(org.Hs.eg.db::org.Hs.eg.db, keytype = kt)
     ok <- gall[gall %in% .VK[[kt]]]; if (length(ok)) { m <- conv_map(ok, from, to); mp[ok] <- unname(m[ok]) }   # one lookup for all genes
@@ -42,12 +53,11 @@ restrict_sets <- function(sets, univ, min_size = 5L, max_size = 500L) {
 #' @rdname restrict_sets
 #' @export
 convert_sets <- function(sets, univ, min_size = 5L, max_size = 500L) {
-  if (!requireNamespace("AnnotationDbi", quietly = TRUE) || !requireNamespace("org.Hs.eg.db", quietly = TRUE))
-    stop("convert_sets needs AnnotationDbi and org.Hs.eg.db")
+  .need_ann("convert_sets")
   sets_on(sets, univ, min_size, max_size)
 }
 norm_sets <- function(r) {
-  if (inherits(r, "GeneSetCollection")) return(GSEABase::geneIds(r))
+  if (inherits(r, "GeneSetCollection")) return(.gsc_ids(r))
   if (is.data.frame(r)) { g <- intersect(c("gene_symbol", "human_gene_symbol", "gene", "symbol"), names(r))[1]
     n <- intersect(c("gs_name", "geneset", "term", "pathway"), names(r))[1]; return(split(as.character(r[[g]]), r[[n]])) }
   if (is.list(r) && all(vapply(r, is.character, logical(1)))) return(r)
@@ -55,3 +65,8 @@ norm_sets <- function(r) {
 }
 short <- function(x) { y <- trimws(sub("^(REACTOME|BIOCARTA|PID|WP)_", "", sub(" - Homo sapiens.*$", "", sub(" \\[KEGG.*\\]", "", x))))
   ifelse(nchar(y) == 0, x, y) }
+## gene sets from a GSEABase GeneSetCollection (GSEABase is suggested, not imported)
+.gsc_ids <- function(x) {
+  if (!requireNamespace("GSEABase", quietly = TRUE)) stop("a GeneSetCollection needs the GSEABase package", call. = FALSE)
+  GSEABase::geneIds(x)
+}
