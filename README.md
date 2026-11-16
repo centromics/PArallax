@@ -8,10 +8,6 @@ Connectivity scoring in pathway space on both sides. The same statistic (WTCS) s
 on genes (G) and on pathways (P), after the query and the library are both mapped to pathway scores.
 G stays the base ranking; P adds evidence. Each compound gets a tier and the pathways that connect it to the query.
 
-Coherence (`split`): `"explore"` (default) = the change correlation inside the connecting pathways goes beyond random
-genes (empirical P < 0.05), as in the paper's senescence case; `"rule"` = the genes behind G lie inside the connecting
-pathways, as in the paper's same-compound benchmark; `"none"`.
-
 ## Install
 
 ```r
